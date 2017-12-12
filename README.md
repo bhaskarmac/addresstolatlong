@@ -16,7 +16,7 @@ A simple program using Google Maps API to search & get the lat, long of location
 
 ### Preview 
 
-![Address-to-latlong Preview](https://raw.githubusercontent.com/bhaskarmac/addresstolatlong/master/img/preview.png)
+![Address-to-latlong Preview](https://raw.githubusercontent.com/bhaskarmac/addresstolatlong/master/img/preview.PNG)
 
 
 ### TODO
