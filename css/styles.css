@@ -13,4 +13,6 @@ body{
 	height: 70px;
 	font-size: 50px;
 	font-family: Roboto;
+	border: none;
+	cursor: pointer;
 }

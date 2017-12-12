@@ -26,7 +26,7 @@ function initMap() {
 		var lng = event.latLng.lng();
 		// console.log('lat=>', lat);
 		// console.log('lng=>', lng);
-		latLongDiv.textContent = lat.toFixed(5) + ', ' + lng.toFixed(5);
+		latLongDiv.value = lat.toFixed(5) + ', ' + lng.toFixed(5);
 	});
 
 	//capturing the elements
@@ -43,6 +43,17 @@ window.addEventListener('load', function() {
 
 	btnSearchPlace.addEventListener("click", function(){
 		searchLocation();
+	}); //click ends here
+
+	latLongDiv.addEventListener("click", function(){
+		latLongDiv.select();
+		document.execCommand("Copy");
+		// alert("Copied=>" + latLongDiv.value);
+		if ( document.selection ) {
+			document.selection.empty();
+		} else if ( window.getSelection ) {
+			window.getSelection().removeAllRanges();
+		}
 	}); //click ends here
 
 	autocomplete.addListener('place_changed', function() {
@@ -151,7 +162,7 @@ window.addEventListener('load', function() {
 							var finalContent = finalResults.results[i].formatted_address + '<br>' + finalResults.results[i].geometry.location.lat + ', ' +finalResults.results[i].geometry.location.lng;
 							infowindow.setContent(finalContent);
 							infowindow.open(map, marker);
-							latLongDiv.textContent = finalResults.results[i].geometry.location.lat.toFixed(5) + ', ' +finalResults.results[i].geometry.location.lng.toFixed(5);
+							latLongDiv.value = finalResults.results[i].geometry.location.lat.toFixed(5) + ', ' +finalResults.results[i].geometry.location.lng.toFixed(5);
 						}
 					})(marker, i));
 				}
