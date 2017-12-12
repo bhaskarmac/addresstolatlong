@@ -14,6 +14,11 @@ A simple program using Google Maps API to search & get the lat, long of location
 4. Autocomplete
 
 
+### Preview 
+
+![Address-to-latlong Preview](https://raw.githubusercontent.com/bhaskarmac/addresstolatlong/master/img/preview.png)
+
+
 ### TODO
 
 
