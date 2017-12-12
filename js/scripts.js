@@ -39,6 +39,21 @@ window.addEventListener('load', function() {
 
 			mapInstance.setCenter(finalResults.results[0].geometry.location);
 
+			
+			if(finalResults.status === 'OK'){
+
+				for (i = 0; i < finalResults.results.length; i++) {  
+					marker = new google.maps.Marker({
+						animation: google.maps.Animation.DROP,
+						position: new google.maps.LatLng(finalResults.results[i].geometry.location.lat, finalResults.results[i].geometry.location.lng),
+						map: mapInstance
+					});
+
+			
+				}
+
+			}
+
 
 		}, function(error) {
 			console.error("Failed!", error);
