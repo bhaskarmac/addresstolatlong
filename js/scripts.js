@@ -28,8 +28,17 @@ window.addEventListener('load', function() {
 		console.log('txtSearchPlace=>', txtSearchPlace.value);
 		var replaced = txtSearchPlace.value.split(' ').join('+');
 		console.log('txtSearchPlace=>', replaced);
-	});
+		var sampleURL = 'https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key='+ mapsKey.key;
+		var addressURL = 'https://maps.googleapis.com/maps/api/geocode/json?address='+replaced+'&key='+ mapsKey.key;
 
+		get(addressURL).then(function(response) {
+			var finalResults = JSON.parse(response);
+			console.log('finalResults=>', finalResults);
+		}, function(error) {
+			console.error("Failed!", error);
+		});
+		
+	});
 });
 
 function get(url) {
