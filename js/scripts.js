@@ -13,6 +13,7 @@ document.getElementsByTagName("head")[0].appendChild(mapJSRef);
 
 var mapInstance;
 var infowindow, marker, i;
+var markers = [];
 
 function initMap() {
 	mapInstance = new google.maps.Map(document.getElementById('map'), {
@@ -29,44 +30,46 @@ window.addEventListener('load', function() {
 	console.log('btnSearchPlace=>', btnSearchPlace);
 
 	btnSearchPlace.addEventListener("click", function(){
-		console.log('txtSearchPlace=>', txtSearchPlace);
-		console.log('txtSearchPlace=>', txtSearchPlace.value);
-		var replaced = txtSearchPlace.value.split(' ').join('+');
-		console.log('txtSearchPlace=>', replaced);
-		var sampleURL = 'https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key='+ mapsKey.key;
-		var addressURL = 'https://maps.googleapis.com/maps/api/geocode/json?address='+replaced+'&key='+ mapsKey.key;
+		if(txtSearchPlace.value){
+			var replaced = txtSearchPlace.value.split(' ').join('+');
+			console.log('txtSearchPlace=>', replaced);
+			var sampleURL = 'https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key='+ mapsKey.key;
+			var addressURL = 'https://maps.googleapis.com/maps/api/geocode/json?address='+replaced+'&key='+ mapsKey.key;
 
-		get(addressURL).then(function(response) {
-			var finalResults = JSON.parse(response);
-			console.log('finalResults=>', finalResults);
+			get(addressURL).then(function(response) {
+				var finalResults = JSON.parse(response);
+				console.log('finalResults=>', finalResults);
 
-			mapInstance.setCenter(finalResults.results[0].geometry.location);
-			mapInstance.setZoom(15);
+				mapInstance.setCenter(finalResults.results[0].geometry.location);
+				mapInstance.setZoom(15);
 
-			if(finalResults.status === 'OK'){
+				if(finalResults.status === 'OK'){
+					clearMarkers();
+					for (i = 0; i < finalResults.results.length; i++) {  
+						marker = new google.maps.Marker({
+							animation: google.maps.Animation.DROP,
+							position: new google.maps.LatLng(finalResults.results[i].geometry.location.lat, finalResults.results[i].geometry.location.lng),
+							map: mapInstance
+						});
+						markers.push(marker);
 
-				for (i = 0; i < finalResults.results.length; i++) {  
-					marker = new google.maps.Marker({
-						animation: google.maps.Animation.DROP,
-						position: new google.maps.LatLng(finalResults.results[i].geometry.location.lat, finalResults.results[i].geometry.location.lng),
-						map: mapInstance
-					});
+						google.maps.event.addListener(marker, 'click', (function(marker, i) {
+							return function() {
+								infowindow.setContent(finalResults.results[i].formatted_address);
+								infowindow.open(map, marker);
+							}
+						})(marker, i));
+					}
 
-					google.maps.event.addListener(marker, 'click', (function(marker, i) {
-						return function() {
-							infowindow.setContent(finalResults.results[i].formatted_address);
-							infowindow.open(map, marker);
-						}
-					})(marker, i));
 				}
 
-			}
 
-
-		}, function(error) {
-			console.error("Failed!", error);
-		});
-
+			}, function(error) {
+				console.error("Failed!", error);
+			});
+		}else{
+			console.error("Location not entered!");
+		}
 	});
 });
 
@@ -99,4 +102,12 @@ function get(url) {
     // Make the request
     req.send();
   });
+}
+
+function clearMarkers() {
+	console.log('in clearMarkers=>', markers);
+	for (var i = 0; i < markers.length; i++) {
+		markers[i].setMap(null);
+	}
+	markers = [];
 }
