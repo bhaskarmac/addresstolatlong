@@ -11,8 +11,10 @@ mapJSRef.onload = function () {
 
 document.getElementsByTagName("head")[0].appendChild(mapJSRef);
 
+var mapInstance;
+
 function initMap() {
-	var map = new google.maps.Map(document.getElementById('map'), {
+	mapInstance = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 18.5204, lng: 73.8567},
 		zoom: 8
 	});
@@ -34,10 +36,14 @@ window.addEventListener('load', function() {
 		get(addressURL).then(function(response) {
 			var finalResults = JSON.parse(response);
 			console.log('finalResults=>', finalResults);
+
+			mapInstance.setCenter(finalResults.results[0].geometry.location);
+
+
 		}, function(error) {
 			console.error("Failed!", error);
 		});
-		
+
 	});
 });
 
