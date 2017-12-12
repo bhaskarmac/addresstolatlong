@@ -1,7 +1,7 @@
 console.log('script loaded');
 console.log('mapsKey=>', mapsKey);
 
-//loading and adding the google maps js to DOM
+//loading and adding the Google maps js to DOM
 var mapJSRef = document.createElement('script');
 mapJSRef.setAttribute("type", "text/javascript");
 mapJSRef.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key='+ mapsKey.key +'&libraries=places');
@@ -12,7 +12,7 @@ mapJSRef.onload = function () {
 document.getElementsByTagName("head")[0].appendChild(mapJSRef);
 
 var mapInstance, infowindow, marker, i, markers = [];
-var btnSearchPlace, txtSearchPlace, autocomplete;
+var btnSearchPlace, txtSearchPlace, autocomplete, latLongDiv;
 
 function initMap() {
 	//Creating map and setting options
@@ -21,9 +21,18 @@ function initMap() {
 		zoom: 8
 	});
 
+	mapInstance.addListener('click', function(event) {
+		var lat = event.latLng.lat();
+		var lng = event.latLng.lng();
+		// console.log('lat=>', lat);
+		// console.log('lng=>', lng);
+		latLongDiv.textContent = lat.toFixed(5) + ', ' + lng.toFixed(5);
+	});
+
 	//capturing the elements
 	btnSearchPlace = document.getElementById("btnSearchPlace");
 	txtSearchPlace = document.getElementById("txtSearchPlace");
+	latLongDiv = document.getElementById("latLong");
 
 	//creating necessary things for features
 	infowindow = new google.maps.InfoWindow();
@@ -64,7 +73,7 @@ window.addEventListener('load', function() {
  * @param  {[string]} url [accepts the url to make call]
  * @return {[Promise]}     [returns Promise of call]
  */
-function get(url) {
+ function get(url) {
   // Return a new promise.
   return new Promise(function(resolve, reject) {
     // Do the usual XHR stuff
@@ -98,28 +107,28 @@ function get(url) {
 /**
  * [clearMarkers : method to clear the markers on map]
  */
-function clearMarkers() {
-	console.log('in clearMarkers=>', markers);
-	for (var i = 0; i < markers.length; i++) {
-		markers[i].setMap(null);
-	}
-	markers = [];
+ function clearMarkers() {
+ 	console.log('in clearMarkers=>', markers);
+ 	for (var i = 0; i < markers.length; i++) {
+ 		markers[i].setMap(null);
+ 	}
+ 	markers = [];
 } //clearMarkers ends here
 
 /**
  * [searchLocation : method to search the location and get the detail about it]
  */
-function searchLocation() {
-	console.log('in searchLocation=>', txtSearchPlace.value);
-	if(txtSearchPlace.value){
-		var replaced = txtSearchPlace.value.split(' ').join('+');
-		console.log('txtSearchPlace=>', replaced);
-		var sampleURL = 'https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key='+ mapsKey.key;
-		var addressURL = 'https://maps.googleapis.com/maps/api/geocode/json?address='+replaced+'&key='+ mapsKey.key;
+ function searchLocation() {
+ 	console.log('in searchLocation=>', txtSearchPlace.value);
+ 	if(txtSearchPlace.value){
+ 		var replaced = txtSearchPlace.value.split(' ').join('+');
+ 		console.log('txtSearchPlace=>', replaced);
+ 		var sampleURL = 'https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key='+ mapsKey.key;
+ 		var addressURL = 'https://maps.googleapis.com/maps/api/geocode/json?address='+replaced+'&key='+ mapsKey.key;
 
-		get(addressURL).then(function(response) {
-			var finalResults = JSON.parse(response);
-			console.log('finalResults=>', finalResults);
+ 		get(addressURL).then(function(response) {
+ 			var finalResults = JSON.parse(response);
+ 			console.log('finalResults=>', finalResults);
 
 			//setting some options to map
 			mapInstance.setCenter(finalResults.results[0].geometry.location);
@@ -139,8 +148,10 @@ function searchLocation() {
 					//adding event to the marker on click to display the complete address
 					google.maps.event.addListener(marker, 'click', (function(marker, i) {
 						return function() {
-							infowindow.setContent(finalResults.results[i].formatted_address);
+							var finalContent = finalResults.results[i].formatted_address + '<br>' + finalResults.results[i].geometry.location.lat + ', ' +finalResults.results[i].geometry.location.lng;
+							infowindow.setContent(finalContent);
 							infowindow.open(map, marker);
+							latLongDiv.textContent = finalResults.results[i].geometry.location.lat.toFixed(5) + ', ' +finalResults.results[i].geometry.location.lng.toFixed(5);
 						}
 					})(marker, i));
 				}
@@ -148,7 +159,7 @@ function searchLocation() {
 		}, function(error) {
 			console.log("Promise failed=>", error);
 		});
-	}else{
-		console.log("Location not entered!");
-	}
+ 	}else{
+ 		console.log("Location not entered!");
+ 	}
 } //searchLocation ends here
