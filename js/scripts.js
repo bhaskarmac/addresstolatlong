@@ -12,12 +12,15 @@ mapJSRef.onload = function () {
 document.getElementsByTagName("head")[0].appendChild(mapJSRef);
 
 var mapInstance;
+var infowindow, marker, i;
 
 function initMap() {
 	mapInstance = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 18.5204, lng: 73.8567},
 		zoom: 8
 	});
+
+	infowindow = new google.maps.InfoWindow();
 }
 
 window.addEventListener('load', function() {
@@ -38,8 +41,8 @@ window.addEventListener('load', function() {
 			console.log('finalResults=>', finalResults);
 
 			mapInstance.setCenter(finalResults.results[0].geometry.location);
+			mapInstance.setZoom(15);
 
-			
 			if(finalResults.status === 'OK'){
 
 				for (i = 0; i < finalResults.results.length; i++) {  
@@ -49,7 +52,12 @@ window.addEventListener('load', function() {
 						map: mapInstance
 					});
 
-			
+					google.maps.event.addListener(marker, 'click', (function(marker, i) {
+						return function() {
+							infowindow.setContent(finalResults.results[i].formatted_address);
+							infowindow.open(map, marker);
+						}
+					})(marker, i));
 				}
 
 			}
