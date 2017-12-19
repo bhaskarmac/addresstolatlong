@@ -26,6 +26,10 @@ var mapsKey = {
 ```
 3. Open the Web browser to `index.html`
 
+### Restrictions
+
+As Google not allow to use the API keys with referer restrictions for Google geocode API, in preview link (https://bhaskarmac.github.io/addresstolatlong/) the searched location cannot be set in map.
+
 ### Preview 
 
 ![Address-to-latlong Preview](img/preview.PNG)
