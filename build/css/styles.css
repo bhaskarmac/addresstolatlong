@@ -2,6 +2,7 @@
 body{
 	margin: 50px 100px 50px 100px;
 	text-align: center;
+	font-family: Roboto;
 }
 #map{
 	height: 500px;
@@ -9,13 +10,20 @@ body{
 	margin: 0 auto;
 }
 #txtSearchPlace{
-	width: 435px;
+	width: 420px;
+	font-family: Roboto;
+	padding: 5px;
+}
+#btnSearchPlace{
+	padding: 6px;
 }
 #latLong{
 	height: 70px;
 	font-size: 40px;
-	font-family: Roboto;
 	border: none;
 	cursor: pointer;
 	text-align: center;
+}
+.note{
+	font-style: italic;
 }
