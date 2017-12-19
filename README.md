@@ -14,6 +14,18 @@ A simple program using Google Maps API to search & get the lat, long of location
 4. Autocomplete
 
 
+### Environment setup
+
+1. You will need to add the `key.json` file in `js` folder
+2. `key.json` will contain following code
+
+```
+var mapsKey = {
+	"key": "YOUR_GOOGLE_MAP_KEY"
+};
+```
+3. Open the Web browser to `index.html`
+
 ### Preview 
 
 ![Address-to-latlong Preview](img/preview.PNG)
