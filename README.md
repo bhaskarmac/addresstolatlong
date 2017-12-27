@@ -40,5 +40,5 @@ As Google not allow to use the API keys with referer restrictions for Google geo
 
 1. ~~On click of map lat, long should be displayed.~~
 2. ~~Display info message after coping the coords to clipboard.~~
-3. On enter press search results should be displayed.
+3. ~~On enter press search results should be displayed.~~ (API Limitation in live demo)
 
