@@ -48,7 +48,7 @@ window.addEventListener('load', function() {
 	latLongDiv.addEventListener("click", function(){
 		latLongDiv.select();
 		document.execCommand("Copy");
-		// alert("Copied=>" + latLongDiv.value);
+		alert("Copied to clipboard " + latLongDiv.value);
 		if ( document.selection ) {
 			document.selection.empty();
 		} else if ( window.getSelection ) {
